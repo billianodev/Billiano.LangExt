@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+    
+  <PropertyGroup>
+    <Title>Billiano.LangExt.Functional</Title>
+    <Description>Add functional programming features to C#</Description>
+    <Authors>Billiano</Authors>
+    <Version>0.0.1-alpha</Version>
+    <RepositoryUrl>https://github.com/billianodev/Billiano.Audio</RepositoryUrl>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+    
+  <ItemGroup>
+      <None Include="README.md">
+          <Pack>True</Pack>
+          <PackagePath>/</PackagePath>
+      </None>
+      <None Include="LICENSE.txt">
+          <Pack>True</Pack>
+          <PackagePath>/</PackagePath>
+      </None>
+  </ItemGroup>
+
+</Project>

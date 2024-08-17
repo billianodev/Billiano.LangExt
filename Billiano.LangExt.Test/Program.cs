@@ -1,17 +1,18 @@
 ﻿using Billiano.LangExt.Functional;
 
 // Option
-Option<int> i = Option.NoValue<int>();
-
+Option<int> option_novalue = Option.NoValue<int>();
+Option<int> option_maybe = Option.Maybe(1000);
+Option<int> option_value = Option.Value(1000);
 
 // Result
-Result a = Result.Ok();
-Result b = new InvalidOperationException();
+Result result_ok = Result.Ok();
+Result result_fail_implicit = new InvalidOperationException();
 
 try
 {
-    a.ThrowIfFailed();
-    b.ThrowIfFailed();
+    result_ok.ThrowIfFailed();
+    result_fail_implicit.ThrowIfFailed();
 }
 catch (Exception ex)
 {
@@ -20,40 +21,40 @@ catch (Exception ex)
 }
 
 // Result<int>
-Result<int> i = 10;
-Result<int> j = Result.Ok(21);
-Result<int> k = Result.Fail<int>(new IndexOutOfRangeException());
+Result<int> result_t_ok_implicit = 10;
+Result<int> result_t_ok = Result.Ok(21);
+Result<int> result_t_fail = Result.Fail<int>(new IndexOutOfRangeException());
 
 static int Double(int v) => v + v;
 static int GetHashCode(object obj) => obj.GetHashCode();
 
-Console.WriteLine(i.Match(Double, GetHashCode));
-Console.WriteLine(j.Match(Double, GetHashCode));
-Console.WriteLine(k.Match(Double, GetHashCode));
+Console.WriteLine(result_t_ok_implicit.Match(Double, GetHashCode));
+Console.WriteLine(result_t_ok.Match(Double, GetHashCode));
+Console.WriteLine(result_t_fail.Match(Double, GetHashCode));
 Console.WriteLine();
 
-if (i.TryGetValue(out var x))
+if (result_t_ok_implicit.TryGetValue(out var x))
     Console.WriteLine(x);
-if (j.TryGetValue(out var y))
+if (result_t_ok.TryGetValue(out var y))
     Console.WriteLine(y);
-if (k.TryGetValue(out var z))
+if (result_t_fail.TryGetValue(out var z))
     Console.WriteLine(z);
 
 Console.WriteLine();
 
-Console.WriteLine(i.GetValueOrDefault());
-Console.WriteLine(j.GetValueOrDefault(102));
-Console.WriteLine(j.GetValueOrDefault(() => 123));
-Console.WriteLine(k.GetValueOrDefault());
-Console.WriteLine(k.GetValueOrDefault(213));
-Console.WriteLine(k.GetValueOrDefault(() => 12));
+Console.WriteLine(result_t_ok_implicit.GetValueOrDefault());
+Console.WriteLine(result_t_ok.GetValueOrDefault(102));
+Console.WriteLine(result_t_ok.GetValueOrDefault(() => 123));
+Console.WriteLine(result_t_fail.GetValueOrDefault());
+Console.WriteLine(result_t_fail.GetValueOrDefault(213));
+Console.WriteLine(result_t_fail.GetValueOrDefault(() => 12));
 Console.WriteLine();
 
 try
 {
-    i.ThrowIfFailed();
-    j.ThrowIfFailed();
-    k.ThrowIfFailed();
+    result_t_ok_implicit.ThrowIfFailed();
+    result_t_ok.ThrowIfFailed();
+    result_t_fail.ThrowIfFailed();
 }
 catch (Exception ex)
 {

@@ -14,6 +14,81 @@ public static class ResultExtensions
         return success(result.Value);
     }
 
+    public static Result<TOut> Then<T, TOut>(this Result<T> result, Func<T, TOut> func)
+    {
+        if (result.IsSuccess)
+        {
+            var value = func(result.Value);
+            return new Result<TOut>(value);
+        }
+
+        return new Result<TOut>(result.Exception);
+    }
+
+    public static Result Then<T>(this Result<T> result, Action<T> action)
+    {
+        if (result.IsSuccess)
+        {
+            action(result.Value);
+            return new Result();
+        }
+
+        return new Result(result.Exception);
+    }
+
+    public static Result Catch(this Result result, Action<Exception> action)
+    {
+        if (result.IsFailed)
+        {
+            action(result.Exception);
+        }
+
+        return result;
+    }
+
+    public static Result<T> Catch<T>(this Result<T> result, Action<Exception> action)
+    {
+        if (result.IsFailed)
+        {
+            action(result.Exception);
+        }
+
+        return result;
+    }
+
+    public static Result<T> Catch<T>(this Result<T> result, Func<Exception, T> func)
+    {
+        if (result.IsFailed)
+        {
+            var value = func(result.Exception);
+            return new Result<T>(value);
+        }
+
+        return result;
+    }
+
+    [DebuggerNonUserCode]
+    public static Result ThrowIfFailed(this Result result)
+    {
+        if (result.IsFailed)
+        {
+            throw result.Exception;
+        }
+
+        return result;
+    }
+
+    [DebuggerNonUserCode]
+    public static Result<T> ThrowIfFailed<T>(this Result<T> result)
+    {
+        if (result.IsFailed)
+        {
+            throw result.Exception;
+        }
+
+        return result;
+    }
+
     public static T? GetValueOrDefault<T>(this Result<T> result)
     {
         if (result.IsFailed)
@@ -66,14 +141,5 @@ public static class ResultExtensions
 
         value = result.Value;
         return true;
-    }
-
-    [DebuggerNonUserCode]
-    public static void ThrowIfFailed(this Result result)
-    {
-        if (result.IsFailed)
-        {
-            throw result.Exception;
-        }
     }
 }

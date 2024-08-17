@@ -41,5 +41,5 @@ public sealed class Option<T>
         HasValue = value is not null;
     }
 
-    public static implicit operator Option<T>(T value) => new(value);
+    public static implicit operator Option<T>(T? value) => new(value);
 }

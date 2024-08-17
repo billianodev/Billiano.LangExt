@@ -6,32 +6,29 @@ public static class Option
 {
     public static Option<T> NoValue<T>()
     {
-        return new Option<T>();
+        return Option<T>.NoValue;
     }
 
     public static Option<T> Maybe<T>(T? value)
     {
-        return new Option<T>(value);
+        return value;
     }
 
     public static Option<T> Value<T>(T value)
     {
-        if (value is null)
-        {
-            throw new ArgumentNullException(nameof(value));
-        }
-
-        return new Option<T>(value);
+        return value ?? throw new ArgumentNullException(nameof(value));
     }
 }
 
 public sealed class Option<T>
 {
+    internal static readonly Option<T> NoValue = new();
+
     [NotNull]
     public T? Value { get; }
     public bool HasValue { get; }
 
-    public Option()
+    private Option()
     {
     }
 

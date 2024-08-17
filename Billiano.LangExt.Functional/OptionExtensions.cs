@@ -4,34 +4,34 @@ namespace Billiano.LangExt.Functional;
 
 public static class OptionExtensions
 {
+    public static Option<TOut> Then<T, TOut>(this Option<T> option, Func<T, TOut> func)
+    {
+        return option.HasValue ? func(option.Value) : default;
+    }
+
+    public static Option<T> Or<T>(this Option<T> option, T defaultValue)
+    {
+        return option.HasValue ? option : defaultValue;
+    }
+
+    public static Option<T> Or<T>(this Option<T> option, Func<T> func)
+    {
+        return option.HasValue ? option : func();
+    }
+
     public static T? GetValueOrDefault<T>(this Option<T> option)
     {
-        if (!option.HasValue)
-        {
-            return default;
-        }
-
-        return option.Value;
+        return option.HasValue ? option.Value : default;
     }
 
     public static T GetValueOrDefault<T>(this Option<T> option, T defaultValue)
     {
-        if (!option.HasValue)
-        {
-            return defaultValue;
-        }
-
-        return option.Value;
+        return option.HasValue ? option.Value : defaultValue;
     }
 
     public static T GetValueOrDefault<T>(this Option<T> option, Func<T> func)
     {
-        if (!option.HasValue)
-        {
-            return func();
-        }
-
-        return option.Value;
+        return option.HasValue ? option.Value : func();
     }
 
     public static bool TryGetValue<T>(this Option<T> option, [NotNullWhen(true)] out T value)

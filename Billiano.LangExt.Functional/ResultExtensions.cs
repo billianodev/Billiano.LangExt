@@ -6,34 +6,23 @@ public static class ResultExtensions
 {
     public static TOut Match<T, TOut>(this Result<T> result, Func<T, TOut> success, Func<Exception, TOut> fail)
     {
-        if (result.IsFailed)
-        {
-            return fail(result.Exception);
-        }
-
-        return success(result.Value);
-    }
-
-    public static Result<TOut> Then<T, TOut>(this Result<T> result, Func<T, TOut> func)
-    {
-        if (result.IsSuccess)
-        {
-            var value = func(result.Value);
-            return new Result<TOut>(value);
-        }
-
-        return new Result<TOut>(result.Exception);
+        return result.IsSuccess ? success(result.Value) : fail(result.Exception);
     }
 
     public static Result Then<T>(this Result<T> result, Action<T> action)
     {
-        if (result.IsSuccess)
+        if (result.IsFailed)
         {
-            action(result.Value);
-            return new Result();
+            return result.Exception;
         }
 
-        return new Result(result.Exception);
+        action(result.Value);
+        return Result.Ok();
+    }
+
+    public static Result<TOut> Then<T, TOut>(this Result<T> result, Func<T, TOut> func)
+    {
+        return result.IsSuccess ? func(result.Value) : result.Exception;
     }
 
     public static Result Catch(this Result result, Action<Exception> action)
@@ -58,13 +47,7 @@ public static class ResultExtensions
 
     public static Result<T> Catch<T>(this Result<T> result, Func<Exception, T> func)
     {
-        if (result.IsFailed)
-        {
-            var value = func(result.Exception);
-            return new Result<T>(value);
-        }
-
-        return result;
+        return result.IsSuccess ? result : func(result.Exception);
     }
 
     [DebuggerNonUserCode]
@@ -91,32 +74,17 @@ public static class ResultExtensions
 
     public static T? GetValueOrDefault<T>(this Result<T> result)
     {
-        if (result.IsFailed)
-        {
-            return default;
-        }
-
-        return result.Value;
+        return result.IsSuccess ? result.Value : default;
     }
 
     public static T GetValueOrDefault<T>(this Result<T> result, T defaultValue)
     {
-        if (result.IsFailed)
-        {
-            return defaultValue;
-        }
-
-        return result.Value;
+        return result.IsSuccess ? result.Value : defaultValue;
     }
 
     public static T GetValueOrDefault<T>(this Result<T> result, Func<T> func)
     {
-        if (result.IsFailed)
-        {
-            return func();
-        }
-
-        return result.Value;
+        return result.IsSuccess ? result.Value : func();
     }
 
     public static bool TryGetValue<T>(this Result<T> result, [NotNullWhen(true)] out T? value)

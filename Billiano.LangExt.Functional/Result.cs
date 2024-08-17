@@ -4,13 +4,15 @@ namespace Billiano.LangExt.Functional;
 
 public class Result
 {
+    private static readonly Result OkValue = new();
+
     [NotNull]
     public Exception? Exception { get; }
 
     public bool IsSuccess { get; }
     public bool IsFailed => !IsSuccess;
 
-    public Result()
+    protected Result()
     {
         IsSuccess = true;
     }
@@ -26,7 +28,7 @@ public class Result
         IsSuccess = false;
     }
 
-    public static Result Ok() => new();
+    public static Result Ok() => OkValue;
     public static Result Fail(Exception ex) => new(ex);
 
     public static Result<T> Ok<T>(T value) => new(value);

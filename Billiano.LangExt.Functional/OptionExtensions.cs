@@ -4,6 +4,16 @@ namespace Billiano.LangExt.Functional;
 
 public static class OptionExtensions
 {
+    public static Option<T> Then<T>(this Option<T> option, Action<T> action)
+    {
+        if (option.HasValue)
+        {
+            action(option.Value);
+        }
+
+        return option;
+    }
+
     public static Option<TOut> Then<T, TOut>(this Option<T> option, Func<T, TOut> func)
     {
         return option.HasValue ? func(option.Value) : default;

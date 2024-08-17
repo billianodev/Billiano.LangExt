@@ -11,8 +11,8 @@
     <Title>Billiano.LangExt.Functional</Title>
     <Description>Add functional programming features to C#</Description>
     <Authors>Billiano</Authors>
-    <Version>0.0.3-alpha</Version>
-    <RepositoryUrl>https://github.com/billianodev/Billiano.Audio</RepositoryUrl>
+    <Version>0.0.4-alpha</Version>
+    <RepositoryUrl>https://github.com/billianodev/Billiano.LangExt</RepositoryUrl>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>

@@ -34,6 +34,7 @@ public class Result
     public static Result<T> Ok<T>(T value) => new(value);
     public static Result<T> Fail<T>(Exception ex) => new(ex);
 
+    [Obsolete("Use Result.Fail instead")]
     public static implicit operator Result(Exception ex) => new(ex);
 }
 
@@ -52,5 +53,7 @@ public class Result<T> : Result
     }
 
     public static implicit operator Result<T>(T value) => new(value);
+
+    [Obsolete("Use Result.Fail instead")]
     public static implicit operator Result<T>(Exception ex) => new(ex);
 }

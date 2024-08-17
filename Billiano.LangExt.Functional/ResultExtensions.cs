@@ -13,7 +13,7 @@ public static class ResultExtensions
     {
         if (result.IsFailed)
         {
-            return result.Exception;
+            return Result.Fail<T>(result.Exception);
         }
 
         action(result.Value);
@@ -22,7 +22,7 @@ public static class ResultExtensions
 
     public static Result<TOut> Then<T, TOut>(this Result<T> result, Func<T, TOut> func)
     {
-        return result.IsSuccess ? func(result.Value) : result.Exception;
+        return result.IsSuccess ? func(result.Value) : Result.Fail<TOut>(result.Exception);
     }
 
     public static Result Catch(this Result result, Action<Exception> action)

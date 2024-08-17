@@ -1,62 +1,55 @@
-﻿using Billiano.LangExt.Functional;
+﻿using Billiano.LangExt.Test.Samples.UserServiceSample;
 
-// Option
-Option<int> option_novalue = Option.NoValue<int>();
-Option<int> option_maybe = Option.Maybe(1000);
-Option<int> option_value = Option.Value(1000);
+namespace Billiano.LangExt.Test;
 
-// Result
-Result result_ok = Result.Ok();
-Result result_fail_implicit = new InvalidOperationException();
-
-try
+public static class Program
 {
-    result_ok.ThrowIfFailed();
-    result_fail_implicit.ThrowIfFailed();
-}
-catch (Exception ex)
-{
-    Console.WriteLine(ex);
-    Console.WriteLine();
-}
+    private static readonly List<SampleInfo> _samples = [];
 
-// Result<int>
-Result<int> result_t_ok_implicit = 10;
-Result<int> result_t_ok = Result.Ok(21);
-Result<int> result_t_fail = Result.Fail<int>(new IndexOutOfRangeException());
+    static Program()
+    {
+        RegisterSample<UserServiceSample>();
+        RegisterSample<UserServiceSampleClassic>();
+    }
 
-static int Double(int v) => v + v;
-static int GetHashCode(object obj) => obj.GetHashCode();
+    private static void Main()
+    {
+    start:
+        try
+        {
+            Console.Clear();
+            Console.WriteLine("Select which sample to run:");
 
-Console.WriteLine(result_t_ok_implicit.Match(Double, GetHashCode));
-Console.WriteLine(result_t_ok.Match(Double, GetHashCode));
-Console.WriteLine(result_t_fail.Match(Double, GetHashCode));
-Console.WriteLine();
+            for (var i = 0; i < _samples.Count; i++)
+            {
+                var sample = _samples[i];
+                Console.WriteLine("{0,3}. {1}", i + 1, sample.Title);
+            }
 
-if (result_t_ok_implicit.TryGetValue(out var x))
-    Console.WriteLine(x);
-if (result_t_ok.TryGetValue(out var y))
-    Console.WriteLine(y);
-if (result_t_fail.TryGetValue(out var z))
-    Console.WriteLine(z);
+            Console.Write(">>> ");
+            var str = Console.ReadLine();
 
-Console.WriteLine();
+            if (int.TryParse(str, out var index))
+            {
+                _samples[index - 1].Sample.RunSample();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+        }
+        finally
+        {
+            Console.WriteLine();
+            Console.WriteLine("End of sample. Press ENTER to return...");
+            Console.ReadLine();
+        }
 
-Console.WriteLine(result_t_ok_implicit.GetValueOrDefault());
-Console.WriteLine(result_t_ok.GetValueOrDefault(102));
-Console.WriteLine(result_t_ok.GetValueOrDefault(() => 123));
-Console.WriteLine(result_t_fail.GetValueOrDefault());
-Console.WriteLine(result_t_fail.GetValueOrDefault(213));
-Console.WriteLine(result_t_fail.GetValueOrDefault(() => 12));
-Console.WriteLine();
+        goto start;
+    }
 
-try
-{
-    result_t_ok_implicit.ThrowIfFailed();
-    result_t_ok.ThrowIfFailed();
-    result_t_fail.ThrowIfFailed();
-}
-catch (Exception ex)
-{
-    Console.WriteLine(ex);
+    private static void RegisterSample<T>() where T : ISample, new()
+    {
+        _samples.Add(new SampleInfo(typeof(T).Name, new T()));
+    }
 }

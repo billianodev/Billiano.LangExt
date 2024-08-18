@@ -4,7 +4,7 @@ namespace Billiano.LangExt.Test;
 
 public static class Program
 {
-    private static readonly List<SampleInfo> _samples = [];
+    private static readonly List<ISample> _samples = [];
 
     static Program()
     {
@@ -14,42 +14,42 @@ public static class Program
 
     private static void Main()
     {
-    start:
-        try
+        while (true)
         {
-            Console.Clear();
-            Console.WriteLine("Select which sample to run:");
-
-            for (var i = 0; i < _samples.Count; i++)
+            try
             {
-                var sample = _samples[i];
-                Console.WriteLine("{0,3}. {1}", i + 1, sample.Title);
+                Console.Clear();
+                Console.WriteLine("Select which sample to run:");
+
+                for (var i = 0; i < _samples.Count; i++)
+                {
+                    var sample = _samples[i];
+                    Console.WriteLine("{0,3}. {1}", i + 1, sample.GetType().Name);
+                }
+
+                Console.Write(">>> ");
+                var str = Console.ReadLine();
+
+                if (int.TryParse(str, out var index))
+                {
+                    _samples[index - 1].RunSample();
+                }
             }
-
-            Console.Write(">>> ");
-            var str = Console.ReadLine();
-
-            if (int.TryParse(str, out var index))
+            catch (Exception ex)
             {
-                _samples[index - 1].Sample.RunSample();
+                Console.WriteLine(ex);
+            }
+            finally
+            {
+                Console.WriteLine();
+                Console.WriteLine("End of sample. Press ENTER to return...");
+                Console.ReadLine();
             }
         }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex);
-        }
-        finally
-        {
-            Console.WriteLine();
-            Console.WriteLine("End of sample. Press ENTER to return...");
-            Console.ReadLine();
-        }
-
-        goto start;
     }
 
     private static void RegisterSample<T>() where T : ISample, new()
     {
-        _samples.Add(new SampleInfo(typeof(T).Name, new T()));
+        _samples.Add(new T());
     }
 }

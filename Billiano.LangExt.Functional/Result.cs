@@ -1,66 +1,38 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Runtime.CompilerServices;
 
 namespace Billiano.LangExt.Functional;
 
-public class Result
+public readonly struct Result : IResult
 {
-    private static readonly Result OkResult = new();
+    private readonly Exception? _exception;
 
-#if NETSTANDARD2_1_OR_GREATER
-    [NotNull]
-#endif
-    public Exception? Exception { get; }
-
-#if NET6_0_OR_GREATER
-    [MemberNotNullWhen(false, nameof(Exception))]
-    public virtual bool IsSuccess { get; }
-#else
-    public bool IsSuccess { get; }
-#endif
-
-#if NET6_0_OR_GREATER
-    [MemberNotNullWhen(true, nameof(Exception))]
-    public virtual bool IsFailed => !IsSuccess;
-#else
-    public bool IsFailed => !IsSuccess;
-#endif
-
-    protected Result()
+    public Result()
     {
         IsSuccess = true;
     }
 
-    public Result(Exception exception)
+    internal Result(Exception ex)
     {
-        if (exception is null)
-        {
-            throw new ArgumentNullException(nameof(exception));
-        }
-
-        Exception = exception;
-        IsSuccess = false;
+        _exception = ex;
     }
 
-    public static Result Ok()
-    {
-        return OkResult;
-    }
+    public Exception Exception => IsFailed ? _exception! : throw new InvalidOperationException();
+    public bool IsSuccess { get; }
+    public bool IsFailed => !IsSuccess;
 
-    public static Result<T> Ok<T>(T value)
-    {
-        return new Result<T>(value);
-    }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Result Ok() => default;
 
-    public static Result Fail(Exception ex)
-    {
-        return new(ex);
-    }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Result Fail(Exception exception) => new(exception);
 
-    public static Result<T> Fail<T>(Exception ex)
-    {
-        return new(ex);
-    }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Result<T> Ok<T>(T value) => new(value);
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Result<T> Fail<T>(Exception exception) => new(exception);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Result From(Action action)
     {
         try
@@ -74,7 +46,34 @@ public class Result
         }
     }
 
-    public static Result<T> From<T>(Func<T> func)
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Result<T> From<T>(Func<T> action)
+    {
+        try
+        {
+            return action();
+        }
+        catch (Exception ex)
+        {
+            return Fail<T>(ex);
+        }
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Result From(Func<Result> func)
+    {
+        try
+        {
+            return func();
+        }
+        catch (Exception ex)
+        {
+            return Fail(ex);
+        }
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Result<T> From<T>(Func<Result<T>> func)
     {
         try
         {
@@ -85,62 +84,29 @@ public class Result
             return Fail<T>(ex);
         }
     }
-
-    public static async Task<Result> FromAsync(Func<Task> func)
-    {
-        try
-        {
-            await func();
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return Fail(ex);
-        }
-    }
-
-    public static async Task<Result<T>> FromAsync<T>(Func<Task<T>> func)
-    {
-        try
-        {
-            return await func();
-        }
-        catch (Exception ex)
-        {
-            return Fail<T>(ex);
-        }
-    }
-
-    [Obsolete("Use Result.Fail instead")]
-    public static implicit operator Result(Exception ex) => new(ex);
 }
 
-public sealed class Result<T> : Result
+public readonly struct Result<T> : IResult<T>
 {
-#if NETSTANDARD2_1_OR_GREATER
-    [NotNull]
-#endif
-    public T? Value { get; }
-
-#if NET6_0_OR_GREATER
-    [MemberNotNullWhen(true, nameof(Value))]
-    public override bool IsSuccess => base.IsSuccess;
-
-    [MemberNotNullWhen(false, nameof(Value))]
-    public override bool IsFailed => base.IsFailed;
-#endif
+    private readonly T? _value;
+    private readonly Exception? _exception;
 
     internal Result(T value)
     {
-        Value = value;
+        _value = value;
+        IsSuccess = true;
     }
 
-    internal Result(Exception exception) : base(exception)
+    internal Result(Exception exception)
     {
+        _exception = exception;
     }
 
-    public static implicit operator Result<T>(T value) => new(value);
+    public T Value => IsSuccess ? _value! : throw new InvalidOperationException();
+    public Exception Exception => IsFailed ? _exception! : throw new InvalidOperationException();
+    public bool IsSuccess { get; }
+    public bool IsFailed => !IsSuccess;
 
-    [Obsolete("Use Result.Fail instead")]
-    public static implicit operator Result<T>(Exception ex) => new(ex);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static implicit operator Result<T>(T value) => new(value);
 }

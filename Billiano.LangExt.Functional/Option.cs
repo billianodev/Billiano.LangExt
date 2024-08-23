@@ -1,48 +1,38 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Runtime.CompilerServices;
 
 namespace Billiano.LangExt.Functional;
 
-public static class Option
+public readonly struct Option
 {
-    public static Option<T> NoValue<T>()
-    {
-        return Option<T>.NoValue;
-    }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Option<T> None<T>() => default;
 
-    public static Option<T> Maybe<T>(T? value)
-    {
-        return new(value);
-    }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Option<T> Maybe<T>(T? value) => new(value);
 
-    public static Option<T> Value<T>(T value)
-    {
-        return new(value ?? throw new ArgumentNullException(nameof(value)));
-    }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Option<T> Some<T>(T value) => new(value, true);
 }
 
-public sealed class Option<T>
+public readonly struct Option<T> : IOption<T>
 {
-    internal static readonly Option<T> NoValue = new();
-
-#if NETSTANDARD2_1_OR_GREATER
-    [NotNull]
-#endif
-    public T? Value { get; }
-
-#if NET6_0_OR_GREATER
-    [MemberNotNullWhen(true, nameof(Value))]
-#endif
-    public bool HasValue { get; }
-
-    internal Option()
-    {
-    }
+    private readonly T? _value;
 
     internal Option(T? value)
     {
-        Value = value;
+        _value = value;
         HasValue = value is not null;
     }
 
+    internal Option(T? value, bool hasValue)
+    {
+        _value = value;
+        HasValue = hasValue;
+    }
+
+    public T Value => HasValue ? _value! : throw new InvalidOperationException();
+    public bool HasValue { get; }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static implicit operator Option<T>(T? value) => new(value);
 }

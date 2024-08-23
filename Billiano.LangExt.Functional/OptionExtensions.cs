@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace Billiano.LangExt.Functional;
+﻿namespace Billiano.LangExt.Functional;
 
 public static class OptionExtensions
 {
@@ -42,11 +40,5 @@ public static class OptionExtensions
     public static T GetValueOrDefault<T>(this Option<T> option, Func<T> func)
     {
         return option.HasValue ? option.Value : func();
-    }
-
-    public static bool TryGetValue<T>(this Option<T> option, [NotNullWhen(true)] out T value)
-    {
-        value = option.Value;
-        return option.HasValue;
     }
 }

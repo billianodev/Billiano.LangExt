@@ -9,14 +9,14 @@ public class UserServiceSample : ISample
         var userService = new UserService();
 
         userService.CreateUser("user@domain.com", "Foo")
-            .Catch(Console.WriteLine);
+            .IfFailed(Console.WriteLine);
         userService.CreateUser("user@domain.com", "Bar")
-            .Catch(Console.WriteLine);
+            .IfFailed(Console.WriteLine);
 
         userService.GetUser("user@domain.com")
             .Then(Console.WriteLine);
         userService.UpdateUser("user@domain.com", user => user with { Name = "Bar" })
-            .Catch(Console.WriteLine);
+            .IfFailed(Console.WriteLine);
         userService.GetUser("user@domain.com")
             .Then(Console.WriteLine);
     }

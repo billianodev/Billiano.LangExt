@@ -9,7 +9,6 @@ public static class Program
     static Program()
     {
         RegisterSample<UserServiceSample>();
-        RegisterSample<UserServiceSampleClassic>();
     }
 
     private static void Main()

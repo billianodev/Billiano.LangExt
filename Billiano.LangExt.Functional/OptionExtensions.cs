@@ -5,21 +5,36 @@ namespace Billiano.LangExt.Functional;
 public static class OptionExtensions
 {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static T? GetValueOrDefault<T>(this Option<T> option)
+    {
+        if (option.HasValue)
+        {
+            return option.Value;
+        }
+
+        return default;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static T GetValueOrDefault<T>(this Option<T> option, T defaultValue)
     {
-        return option.HasValue ? option.Value : defaultValue;
+        if (option.HasValue)
+        {
+            return option.Value;
+        }
+
+        return defaultValue;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static T GetValueOrDefault<T>(this Option<T> option, Func<T> func)
     {
-        return option.HasValue ? option.Value : func();
-    }
+        if (option.HasValue)
+        {
+            return option.Value;
+        }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static T? GetValueOrDefault<T>(this Option<T> option)
-    {
-        return option.HasValue ? option.Value : default;
+        return func();
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -44,6 +59,7 @@ public static class OptionExtensions
         return Option.None<TOut>();
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Option<T> IfNone<T>(this Option<T> option, Action action)
     {
         if (!option.HasValue)
@@ -57,12 +73,33 @@ public static class OptionExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Option<T> Or<T>(this Option<T> option, T defaultValue)
     {
-        return option.HasValue ? option : defaultValue;
+        if (option.HasValue)
+        {
+            return option;
+        }
+
+        return defaultValue;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Option<T> Or<T>(this Option<T> option, Func<T> func)
     {
-        return option.HasValue ? option : func();
+        if (option.HasValue)
+        {
+            return option;
+        }
+
+        return func();
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Option<T> Or<T>(this Option<T> option, Func<Option<T>> func)
+    {
+        if (option.HasValue)
+        {
+            return option;
+        }
+
+        return func();
     }
 }

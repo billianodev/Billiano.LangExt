@@ -7,19 +7,34 @@ public static class ResultExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static T? GetValueOrDefault<T>(this Result<T> result)
     {
-        return result.IsSuccess ? result.Value : default;
+        if (result.IsSuccess)
+        {
+            return result.Value;
+        }
+
+        return default;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static T GetValueOrDefault<T>(this Result<T> result, T defaultValue)
     {
-        return result.IsSuccess ? result.Value : defaultValue;
+        if (result.IsSuccess)
+        {
+            return result.Value;
+        }
+
+        return defaultValue;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static T GetValueOrDefault<T>(this Result<T> result, Func<T> func)
     {
-        return result.IsSuccess ? result.Value : func();
+        if (result.IsSuccess)
+        {
+            return result.Value;
+        }
+
+        return func();
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -44,6 +59,7 @@ public static class ResultExtensions
         return success(result.Value);
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Result IfSuccess(this Result result, Action action)
     {
         if (result.IsSuccess)
@@ -54,6 +70,7 @@ public static class ResultExtensions
         return result;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Result<T> IfSuccess<T>(this Result<T> result, Action<T> action)
     {
         if (result.IsSuccess)
@@ -174,6 +191,7 @@ public static class ResultExtensions
         return result;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Result ThrowIfFailed(this Result result)
     {
         if (result.IsFailed)
@@ -184,6 +202,7 @@ public static class ResultExtensions
         return result;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Result<T> ThrowIfFailed<T>(this Result<T> result)
     {
         if (result.IsFailed)
@@ -194,6 +213,7 @@ public static class ResultExtensions
         return result;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Result Catch(this Result result, Action<Exception> action)
     {
         if (result.IsFailed)
@@ -204,6 +224,7 @@ public static class ResultExtensions
         return Result.Ok();
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Result Catch<T>(this Result<T> result, Action<Exception> action)
     {
         if (result.IsFailed)
@@ -235,5 +256,15 @@ public static class ResultExtensions
         }
 
         return result;
+    }
+
+    public static Option<T> ToOption<T>(this Result<T> result)
+    {
+        if (result.IsSuccess)
+        {
+            return Option.Some(result.Value);
+        }
+
+        return Option.None<T>();
     }
 }

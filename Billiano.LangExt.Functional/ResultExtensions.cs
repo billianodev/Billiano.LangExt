@@ -4,7 +4,6 @@ namespace Billiano.LangExt.Functional;
 
 public static class ResultExtensions
 {
-    #region GetValueOrDefault
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static T? GetValueOrDefault<T>(this Result<T> result)
     {
@@ -22,9 +21,7 @@ public static class ResultExtensions
     {
         return result.IsSuccess ? result.Value : func();
     }
-    #endregion
 
-    #region Match
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TOut Match<TOut>(this Result result, Func<TOut> success, Func<Exception, TOut> failed)
     {
@@ -46,9 +43,27 @@ public static class ResultExtensions
 
         return success(result.Value);
     }
-    #endregion
 
-    #region Then
+    public static Result IfSuccess(this Result result, Action action)
+    {
+        if (result.IsSuccess)
+        {
+            action();
+        }
+
+        return result;
+    }
+
+    public static Result<T> IfSuccess<T>(this Result<T> result, Action<T> action)
+    {
+        if (result.IsSuccess)
+        {
+            action(result.Value);
+        }
+
+        return result;
+    }
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Result Then(this Result result, Action action)
     {
@@ -57,7 +72,7 @@ public static class ResultExtensions
             return Result.From(action);
         }
 
-        return Result.Fail(result.Exception);
+        return result;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -68,7 +83,7 @@ public static class ResultExtensions
             return Result.From(func);
         }
 
-        return Result.Fail(result.Exception);
+        return result;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -94,47 +109,25 @@ public static class ResultExtensions
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Result Then<T>(this Result<T> result, Action action)
+    public static Result Then<T>(this Result<T> result, Action<T> action)
     {
         if (result.IsSuccess)
         {
-            return Result.From(action);
+            return Result.From(() => action(result.Value));
         }
 
         return Result.Fail(result.Exception);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Result Then<T>(this Result<T> result, Func<Result> func)
+    public static Result Then<T>(this Result<T> result, Func<T, Result> func)
     {
         if (result.IsSuccess)
         {
-            return Result.From(func);
+            return Result.From(() => func(result.Value));
         }
 
         return Result.Fail(result.Exception);
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Result<TOut> Then<T, TOut>(this Result<T> result, Func<TOut> func)
-    {
-        if (result.IsSuccess)
-        {
-            return Result.From(func);
-        }
-
-        return Result.Fail<TOut>(result.Exception);
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Result<TOut> Then<T, TOut>(this Result<T> result, Func<Result<TOut>> func)
-    {
-        if (result.IsSuccess)
-        {
-            return Result.From(func);
-        }
-
-        return Result.Fail<TOut>(result.Exception);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -158,9 +151,49 @@ public static class ResultExtensions
 
         return Result.Fail<TOut>(result.Exception);
     }
-    #endregion
 
-    #region Catch
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Result IfFailed(this Result result, Action<Exception> action)
+    {
+        if (result.IsFailed)
+        {
+            action(result.Exception);
+        }
+
+        return result;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Result<T> IfFailed<T>(this Result<T> result, Action<Exception> action)
+    {
+        if (result.IsFailed)
+        {
+            action(result.Exception);
+        }
+
+        return result;
+    }
+
+    public static Result ThrowIfFailed(this Result result)
+    {
+        if (result.IsFailed)
+        {
+            throw result.Exception;
+        }
+
+        return result;
+    }
+
+    public static Result<T> ThrowIfFailed<T>(this Result<T> result)
+    {
+        if (result.IsFailed)
+        {
+            throw result.Exception;
+        }
+
+        return result;
+    }
+
     public static Result Catch(this Result result, Action<Exception> action)
     {
         if (result.IsFailed)
@@ -176,6 +209,7 @@ public static class ResultExtensions
         if (result.IsFailed)
         {
             action(result.Exception);
+
         }
 
         return Result.Ok();
@@ -202,51 +236,4 @@ public static class ResultExtensions
 
         return result;
     }
-    #endregion
-
-    #region IfFailed
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Result IfFailed(this Result result, Action<Exception> action)
-    {
-        if (result.IsFailed)
-        {
-            action(result.Exception);
-        }
-
-        return result;
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Result<T> IfFailed<T>(this Result<T> result, Action<Exception> action)
-    {
-        if (result.IsFailed)
-        {
-            action(result.Exception);
-        }
-
-        return result;
-    }
-    #endregion
-
-    #region ThrowIfFailed
-    public static Result ThrowIfFailed(this Result result)
-    {
-        if (result.IsFailed)
-        {
-            throw result.Exception;
-        }
-
-        return result;
-    }
-
-    public static Result<T> ThrowIfFailed<T>(this Result<T> result)
-    {
-        if (result.IsFailed)
-        {
-            throw result.Exception;
-        }
-
-        return result;
-    }
-    #endregion
 }

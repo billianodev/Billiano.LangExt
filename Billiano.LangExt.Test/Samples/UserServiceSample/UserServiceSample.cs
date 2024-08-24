@@ -14,10 +14,10 @@ public class UserServiceSample : ISample
             .IfFailed(Console.WriteLine);
 
         userService.GetUser("user@domain.com")
-            .Then(Console.WriteLine);
+            .IfSome(Console.WriteLine);
         userService.UpdateUser("user@domain.com", user => user with { Name = "Bar" })
             .IfFailed(Console.WriteLine);
         userService.GetUser("user@domain.com")
-            .Then(Console.WriteLine);
+            .IfSome(Console.WriteLine);
     }
 }

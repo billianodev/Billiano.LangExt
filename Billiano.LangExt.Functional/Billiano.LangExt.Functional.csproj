@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
@@ -11,7 +11,7 @@
     <Title>Billiano.LangExt.Functional</Title>
     <Description>Add functional programming features to C#</Description>
     <Authors>Billiano</Authors>
-    <Version>0.0.6-alpha</Version>
+    <Version>0.0.7-alpha</Version>
     <RepositoryUrl>https://github.com/billianodev/Billiano.LangExt</RepositoryUrl>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageReadmeFile>README.md</PackageReadmeFile>

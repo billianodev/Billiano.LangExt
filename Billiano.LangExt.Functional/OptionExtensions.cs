@@ -2,8 +2,14 @@
 
 namespace Billiano.LangExt.Functional;
 
+/// <summary>
+/// Provides extension methods for the <see cref="Option{T}"/> type.
+/// </summary>
 public static class OptionExtensions
 {
+    /// <summary>
+    /// Gets the value of the option if it has a value, otherwise returns the default value for the type.
+    /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static T? GetValueOrDefault<T>(this Option<T> option)
     {
@@ -15,6 +21,9 @@ public static class OptionExtensions
         return default;
     }
 
+    /// <summary>
+    /// Gets the value of the option if it has a value, otherwise returns the specified default value.
+    /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static T GetValueOrDefault<T>(this Option<T> option, T defaultValue)
     {
@@ -26,7 +35,9 @@ public static class OptionExtensions
         return defaultValue;
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    /// <summary>
+    /// Gets the value of the option if it has a value, otherwise returns the result of the specified function.
+    /// </summary>
     public static T GetValueOrDefault<T>(this Option<T> option, Func<T> func)
     {
         if (option.HasValue)
@@ -37,6 +48,9 @@ public static class OptionExtensions
         return func();
     }
 
+    /// <summary>
+    /// Executes the specified action if the current <see cref="Option{T}"/> has a value.
+    /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Option<T> IfSome<T>(this Option<T> option, Action<T> action)
     {
@@ -48,6 +62,10 @@ public static class OptionExtensions
         return option;
     }
 
+    /// <summary>
+    /// Applies the specified function to the value of the current <see cref="Option{T}"/> if it has a value,
+    /// otherwise returns a new <see cref="Option{TOut}"/> with no value.
+    /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Option<TOut> Then<T, TOut>(this Option<T> option, Func<T, TOut> func)
     {
@@ -59,6 +77,9 @@ public static class OptionExtensions
         return Option.None<TOut>();
     }
 
+    /// <summary>
+    /// Executes the specified action if the current <see cref="Option{T}"/> does not have a value.
+    /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Option<T> IfNone<T>(this Option<T> option, Action action)
     {
@@ -70,6 +91,9 @@ public static class OptionExtensions
         return option;
     }
 
+    /// <summary>
+    /// Provides a default value or a function to compute a default value for an <see cref="Option{T}"/> if it does not have a value.
+    /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Option<T> Or<T>(this Option<T> option, T defaultValue)
     {
@@ -81,6 +105,9 @@ public static class OptionExtensions
         return defaultValue;
     }
 
+    /// <summary>
+    /// Provides a default value or a function to compute a default value for an <see cref="Option{T}"/> if it does not have a value.
+    /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Option<T> Or<T>(this Option<T> option, Func<T> func)
     {
@@ -92,6 +119,9 @@ public static class OptionExtensions
         return func();
     }
 
+    /// <summary>
+    /// Provides a default value or a function to compute a default value for an <see cref="Option{T}"/> if it does not have a value.
+    /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Option<T> Or<T>(this Option<T> option, Func<Option<T>> func)
     {

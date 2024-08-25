@@ -11,10 +11,11 @@
     <Title>Billiano.LangExt.Functional</Title>
     <Description>Add functional programming features to C#</Description>
     <Authors>Billiano</Authors>
-    <Version>0.0.8-alpha</Version>
+    <Version>0.0.9-alpha</Version>
     <RepositoryUrl>https://github.com/billianodev/Billiano.LangExt</RepositoryUrl>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
     
   <ItemGroup>

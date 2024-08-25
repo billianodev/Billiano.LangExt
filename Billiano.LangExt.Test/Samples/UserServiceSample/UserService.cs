@@ -11,28 +11,38 @@ public class UserService
         return _usersDatabase.Find(user => user.Email == email);
     }
 
-    public Result<User> UpdateUser(string email, Func<User, User> update)
-    {
-        var index = _usersDatabase.FindIndex(user => user.Email == email);
-        if (index == -1)
-        {
-            return Result.Fail<User>(new KeyNotFoundException(email));
-        }
-
-        var result = update(_usersDatabase[index]);
-        _usersDatabase[index] = result;
-        return result;
-    }
-
     public Result<User> CreateUser(string email, string name)
     {
         if (_usersDatabase.Any(user => user.Email == email))
         {
-            return Result.Fail<User>(new ArgumentException("Email already exists", nameof(email)));
+            return Result.Fail<User>(new ArgumentException($"Email {email} already exists"));
         }
 
         var user = new User(email, name);
         _usersDatabase.Add(user);
         return user;
+    }
+
+    public Result<User> UpdateUser(User user, Func<User, User> update)
+    {
+        var index = _usersDatabase.FindIndex(u => u == user);
+        if (index == -1)
+        {
+            return Result.Fail<User>(new KeyNotFoundException(user.Email));
+        }
+
+        var result = update(user);
+        _usersDatabase[index] = result;
+        return result;
+    }
+
+    public Result DeleteUser(User user)
+    {
+        if (_usersDatabase.Remove(user))
+        {
+            return Result.Ok();
+        }
+
+        return Result.Fail(new KeyNotFoundException(user.Email));
     }
 }

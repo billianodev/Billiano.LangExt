@@ -13,6 +13,9 @@ public static class Program
 
     private static void Main()
     {
+        RunSample<UserServiceSample>();
+        return;
+
         while (true)
         {
             try
@@ -45,6 +48,12 @@ public static class Program
                 Console.ReadLine();
             }
         }
+    }
+
+    private static void RunSample<T>() where T : ISample, new()
+    {
+        var sample = new T();
+        sample.RunSample();
     }
 
     private static void RegisterSample<T>() where T : ISample, new()

@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
-namespace Billiano.LangExt.OptionResult;
+namespace Billiano.LangExt.Functional.OptionResult;
 
 /// <summary>
 /// Represents a result of an operation that can either be successful or fail with an exception.

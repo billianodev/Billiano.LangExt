@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
-namespace Billiano.LangExt.OptionResult;
+namespace Billiano.LangExt.Functional.OptionResult;
 
 /// <summary>
 /// Provides static methods for creating Option.

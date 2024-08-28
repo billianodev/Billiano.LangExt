@@ -1,4 +1,4 @@
-﻿namespace Billiano.LangExt.OptionResult;
+﻿namespace Billiano.LangExt.Functional.OptionResult;
 
 /// <summary>
 /// Represents an optional value.

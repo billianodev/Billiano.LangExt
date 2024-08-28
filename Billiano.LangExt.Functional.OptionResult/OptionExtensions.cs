@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
-namespace Billiano.LangExt.Functional;
+namespace Billiano.LangExt.OptionResult;
 
 /// <summary>
 /// Provides extension methods for the <see cref="Option{T}"/> type.

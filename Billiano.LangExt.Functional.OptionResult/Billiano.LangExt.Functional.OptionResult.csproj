@@ -8,10 +8,10 @@
   </PropertyGroup>
     
   <PropertyGroup>
-    <Title>Billiano.LangExt.Functional</Title>
-    <Description>Add functional programming features to C#</Description>
+    <Title>Billiano.LangExt.Functional.OptionResult</Title>
+    <Description>Add Option and Result types to C#</Description>
     <Authors>Billiano</Authors>
-    <Version>0.0.9-alpha</Version>
+    <Version>0.1.0-beta.1</Version>
     <RepositoryUrl>https://github.com/billianodev/Billiano.LangExt</RepositoryUrl>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageReadmeFile>README.md</PackageReadmeFile>

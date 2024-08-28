@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Billiano.LangExt.Functional\Billiano.LangExt.Functional.csproj" />
+    <ProjectReference Include="..\Billiano.LangExt.Functional.OptionResult\Billiano.LangExt.Functional.OptionResult.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-﻿namespace Billiano.LangExt.Functional;
+﻿namespace Billiano.LangExt.OptionResult;
 
 /// <summary>
 /// This static class contains extension methods for converting between <see cref="Result"/> objects and <see cref="Option{T}"/> objects.

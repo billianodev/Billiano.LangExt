@@ -1,4 +1,4 @@
-﻿using Billiano.LangExt.Functional;
+﻿using Billiano.LangExt.OptionResult;
 
 namespace Billiano.LangExt.Test.Samples.UserServiceSample;
 

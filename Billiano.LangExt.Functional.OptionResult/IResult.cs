@@ -1,4 +1,4 @@
-namespace Billiano.LangExt.Functional;
+namespace Billiano.LangExt.OptionResult;
 
 /// <summary>
 /// Represents the result of an operation that can either succeed or fail.

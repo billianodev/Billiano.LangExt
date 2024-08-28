@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Billiano.LangExt.Functional", "Billiano.LangExt.Functional\Billiano.LangExt.Functional.csproj", "{BD2EFD20-D15A-4B3D-92F0-C3289B319619}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Billiano.LangExt.Functional.OptionResult", "Billiano.LangExt.Functional.OptionResult\Billiano.LangExt.Functional.OptionResult.csproj", "{BD2EFD20-D15A-4B3D-92F0-C3289B319619}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Billiano.LangExt.Test", "Billiano.LangExt.Test\Billiano.LangExt.Test.csproj", "{A7900FCB-9066-425D-9477-60F05B08FAF5}"
 EndProject

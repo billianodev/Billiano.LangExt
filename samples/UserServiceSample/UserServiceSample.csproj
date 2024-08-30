@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Billiano.LangExt.Functional.OptionResult\Billiano.LangExt.Functional.OptionResult.csproj" />
+    <ProjectReference Include="..\..\Billiano.LangExt.Functional.OptionResult\Billiano.LangExt.Functional.OptionResult.csproj" />
   </ItemGroup>
 
 </Project>

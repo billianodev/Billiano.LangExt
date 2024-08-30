@@ -1,6 +1,6 @@
 ﻿using Billiano.LangExt.Functional.OptionResult;
 
-namespace Billiano.LangExt.Test.Samples.UserServiceSample;
+namespace UserServiceSample;
 
 public class UserService
 {
@@ -46,3 +46,5 @@ public class UserService
         return Result.Fail(new KeyNotFoundException(user.Email));
     }
 }
+
+public record User(string Email, string Name);

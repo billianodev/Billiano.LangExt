@@ -113,7 +113,8 @@ public static class ResultExtensions
     {
         if (result.IsSuccess)
         {
-            return Result.From(action);
+            action();
+            return Result.Ok();
         }
 
         return result;
@@ -127,7 +128,7 @@ public static class ResultExtensions
     {
         if (result.IsSuccess)
         {
-            return Result.From(func);
+            return func();
         }
 
         return result;
@@ -141,7 +142,7 @@ public static class ResultExtensions
     {
         if (result.IsSuccess)
         {
-            return Result.From(func);
+            return func();
         }
 
         return Result.Fail<TOut>(result.Exception);
@@ -155,7 +156,7 @@ public static class ResultExtensions
     {
         if (result.IsSuccess)
         {
-            return Result.From(func);
+            return func();
         }
 
         return Result.Fail<TOut>(result.Exception);
@@ -169,7 +170,8 @@ public static class ResultExtensions
     {
         if (result.IsSuccess)
         {
-            return Result.From(() => action(result.Value));
+            action(result.Value);
+            return Result.Ok();
         }
 
         return Result.Fail(result.Exception);
@@ -183,7 +185,7 @@ public static class ResultExtensions
     {
         if (result.IsSuccess)
         {
-            return Result.From(() => func(result.Value));
+            return func(result.Value);
         }
 
         return Result.Fail(result.Exception);
@@ -197,7 +199,7 @@ public static class ResultExtensions
     {
         if (result.IsSuccess)
         {
-            return Result.From(() => func(result.Value));
+            return func(result.Value);
         }
 
         return Result.Fail<TOut>(result.Exception);
@@ -208,6 +210,118 @@ public static class ResultExtensions
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Result<TOut> Then<T, TOut>(this Result<T> result, Func<T, Result<TOut>> func)
+    {
+        if (result.IsSuccess)
+        {
+            return func(result.Value);
+        }
+
+        return Result.Fail<TOut>(result.Exception);
+    }
+
+    /// <summary>
+    /// Applies the specified action if the Result is successful.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Result TryThen(this Result result, Action action)
+    {
+        if (result.IsSuccess)
+        {
+            return Result.From(action);
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Applies the specified function if the Result is successful.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Result TryThen(this Result result, Func<Result> func)
+    {
+        if (result.IsSuccess)
+        {
+            return Result.From(func);
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Applies the specified function if the Result is successful.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Result<TOut> TryThen<TOut>(this Result result, Func<TOut> func)
+    {
+        if (result.IsSuccess)
+        {
+            return Result.From(func);
+        }
+
+        return Result.Fail<TOut>(result.Exception);
+    }
+
+    /// <summary>
+    /// Applies the specified function if the Result is successful.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Result<TOut> TryThen<TOut>(this Result result, Func<Result<TOut>> func)
+    {
+        if (result.IsSuccess)
+        {
+            return Result.From(func);
+        }
+
+        return Result.Fail<TOut>(result.Exception);
+    }
+
+    /// <summary>
+    /// Applies the specified action if the <see cref="Result{T}"/> is successful.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Result TryThen<T>(this Result<T> result, Action<T> action)
+    {
+        if (result.IsSuccess)
+        {
+            return Result.From(() => action(result.Value));
+        }
+
+        return Result.Fail(result.Exception);
+    }
+
+    /// <summary>
+    /// Applies the specified function if the <see cref="Result{T}"/> is successful.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Result TryThen<T>(this Result<T> result, Func<T, Result> func)
+    {
+        if (result.IsSuccess)
+        {
+            return Result.From(() => func(result.Value));
+        }
+
+        return Result.Fail(result.Exception);
+    }
+
+    /// <summary>
+    /// Applies the specified function if the <see cref="Result{T}"/> is successful.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Result<TOut> TryThen<T, TOut>(this Result<T> result, Func<T, TOut> func)
+    {
+        if (result.IsSuccess)
+        {
+            return Result.From(() => func(result.Value));
+        }
+
+        return Result.Fail<TOut>(result.Exception);
+    }
+
+    /// <summary>
+    /// Applies the specified function if the <see cref="Result{T}"/> is successful.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Result<TOut> TryThen<T, TOut>(this Result<T> result, Func<T, Result<TOut>> func)
     {
         if (result.IsSuccess)
         {
@@ -309,7 +423,7 @@ public static class ResultExtensions
     {
         if (result.IsFailed)
         {
-            return Result.From(() => func(result.Exception));
+            return func(result.Exception);
         }
 
         return result;
@@ -320,6 +434,62 @@ public static class ResultExtensions
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Result<T> Catch<T>(this Result<T> result, Func<Exception, Result<T>> func)
+    {
+        if (result.IsFailed)
+        {
+            return func(result.Exception);
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Applies the specified action to the exception if the Result is failed.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Result TryCatch(this Result result, Action<Exception> action)
+    {
+        if (result.IsFailed)
+        {
+            return Result.From(() => action(result.Exception));
+        }
+
+        return Result.Ok();
+    }
+
+    /// <summary>
+    /// Applies the specified action to the exception if the <see cref="Result{T}"/> is failed.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Result TryCatch<T>(this Result<T> result, Action<Exception> action)
+    {
+        if (result.IsFailed)
+        {
+            return Result.From(() => action(result.Exception));
+        }
+
+        return Result.Ok();
+    }
+
+    /// <summary>
+    /// Applies the specified function to the exception if the <see cref="Result{T}"/> is failed, returning a new <see cref="Result{T}"/> with the transformed value.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Result<T> TryCatch<T>(this Result<T> result, Func<Exception, T> func)
+    {
+        if (result.IsFailed)
+        {
+            return Result.From(() => func(result.Exception));
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Applies the specified function to the exception if the <see cref="Result{T}"/> is failed, returning a new <see cref="Result{T}"/> with the transformed Result.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Result<T> TryCatch<T>(this Result<T> result, Func<Exception, Result<T>> func)
     {
         if (result.IsFailed)
         {

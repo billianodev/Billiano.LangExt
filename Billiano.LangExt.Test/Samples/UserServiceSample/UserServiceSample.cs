@@ -2,10 +2,6 @@
 
 namespace Billiano.LangExt.Test.Samples.UserServiceSample;
 
-/* 
- * User service sampple
- * Simulate non-concurrent requests
- */
 public class UserServiceSample : ISample
 {
     public void RunSample()

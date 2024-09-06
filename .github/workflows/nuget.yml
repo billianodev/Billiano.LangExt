@@ -32,7 +32,7 @@ jobs:
         retention-days: 7
         path: bin/*.nupkg
         
-  deploy:
+  publish:
     runs-on: ubuntu-latest
     needs: ['build']
     steps:
@@ -51,6 +51,6 @@ jobs:
       # Publish all NuGet packages to NuGet.org
       - name: Publish NuGet package
         run: |
-          foreach($file in (Get-ChildItem bin -Recurse -Include *.nupkg)) {
+          foreach ($file in (Get-ChildItem bin -Recurse -Include *.nupkg)) {
               dotnet nuget push $file --api-key "${{ secrets.NUGET_API }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
           }

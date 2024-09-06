@@ -3,14 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35201.85
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{296BD9CD-4636-45DB-B9C0-1B57B668CC40}"
-	ProjectSection(SolutionItems) = preProject
-		.gitattributes = .gitattributes
-		.gitignore = .gitignore
-		LICENSE.txt = LICENSE.txt
-		README.md = README.md
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Billiano.LangExt.Functional.OptionResult", "Billiano.LangExt.Functional.OptionResult\Billiano.LangExt.Functional.OptionResult.csproj", "{BD2EFD20-D15A-4B3D-92F0-C3289B319619}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserServiceSample", "samples\UserServiceSample\UserServiceSample.csproj", "{199338A3-5324-4E90-9456-031FD2B9641E}"

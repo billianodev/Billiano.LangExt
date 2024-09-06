@@ -3,7 +3,7 @@ using UserServiceSample;
 
 var userService = new UserService();
 
-// Requset 1 : Get or create user
+// Request 1 : Get or create user
 userService.GetUser("user@domain.com")
     .Or(() => userService.CreateUser("user@domain.com", "Foo")
         .IfFailed(Console.WriteLine)
